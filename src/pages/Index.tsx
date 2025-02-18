@@ -4,36 +4,57 @@ import { motion } from "framer-motion";
 
 const PhotoGrid = () => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
-  useEffect(() => {
-    // Function to load all image URLs from the /img directory
-    const loadImageUrls = async () => {
-      try {
-        // First, make a request to get all files in the directory
-        const response = await fetch('/img/');
-        if (!response.ok) {
-          console.error('Failed to fetch directory listing');
-          return;
-        }
-        
-        const files = (await response.text()).split('\n')
-          .filter(filename => 
-            filename.toLowerCase().endsWith('.png') || 
-            filename.toLowerCase().endsWith('.jpg') || 
-            filename.toLowerCase().endsWith('.jpeg')
-          );
-
-        // Set the valid image URLs
-        setImageUrls(files);
-        console.log('Found images:', files);
-      } catch (error) {
-        console.error('Error loading images:', error);
-      }
-    };
-
-    loadImageUrls();
-  }, []);
+  // Define the image filenames that we know exist in the public/img directory
+  const imageUrls = [
+    "2012-06-02 22.30.00.jpg",
+    "2012-07-01 15.32.32.jpg",
+    "2012-07-02 12.26.19.jpg",
+    "2012-07-03 21.57.03.jpg",
+    "2013-06-06 21.03.52.jpg",
+    "2013-06-26 09.41.51.jpg",
+    "2013-06-27 13.57.12.jpg",
+    "2013-08-23 08.45.09-1.jpg",
+    "2013-10-21 18.18.36.jpg",
+    "2014-03-01 19.05.53.jpg",
+    "2014-04-18 10.54.01.png",
+    "2014-06-21 16.10.06.jpg",
+    "2014-09-26 20.26.35.jpg",
+    "2014-11-15 17.42.37.jpg",
+    "2014-11-15 18.10.00.jpg",
+    "9A3ED042-9F2A-4040-8233-402E505C11DF-2379-00000117EAF19677.jpg",
+    "DSCF2035.JPG",
+    "DSC_0372.JPG",
+    "FUJI3291.JPG",
+    "FUJI4038.JPG",
+    "FUJI4151.JPG",
+    "FUJI4798.JPG",
+    "IMG_0096.JPG",
+    "IMG_0141.JPG",
+    "IMG_0188.JPG",
+    "IMG_0254.JPG",
+    "IMG_0263.JPG",
+    "IMG_0282.JPG",
+    "IMG_0285.JPG",
+    "IMG_0290.JPG",
+    "IMG_0489.JPG",
+    "IMG_0930.JPG",
+    "IMG_0985.JPG",
+    "IMG_1070.JPG",
+    "IMG_1091.JPG",
+    "IMG_1094.JPG",
+    "IMG_1138.JPG",
+    "IMG_1266.jpeg",
+    "IMG_1283.jpeg",
+    "IMG_1385.JPG",
+    "IMG_1434.jpeg",
+    "IMG_1613.JPG",
+    "IMG_2383.jpeg",
+    "IMG_2398.JPG",
+    "IMG_3862.JPG",
+    "IMG_4119.jpeg",
+    "IMG_5701.jpeg"
+  ];
 
   useEffect(() => {
     const updateDimensions = () => {
