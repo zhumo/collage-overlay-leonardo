@@ -1,3 +1,4 @@
+
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
@@ -10,7 +11,11 @@ const PhotoGrid = () => {
     const images = containerRef.current.querySelectorAll('img');
     images.forEach(img => {
       img.addEventListener('load', () => {
+        console.log(`Image loaded successfully: ${img.src}`);
         img.classList.add('loaded');
+      });
+      img.addEventListener('error', () => {
+        console.error(`Failed to load image: ${img.src}`);
       });
     });
   }, []);
@@ -48,6 +53,8 @@ const PhotoGrid = () => {
                 alt={`Memory ${index + 1}`}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
+                onLoad={() => console.log(`Image ${index + 1} loaded`)}
+                onError={() => console.error(`Image ${index + 1} failed to load`)}
               />
             </motion.div>
           ))}
