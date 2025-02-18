@@ -11,13 +11,13 @@ const PhotoGrid = () => {
     const loadImageUrls = async () => {
       const allImages = await Promise.all([...Array(23)].map(async (_, index) => {
         try {
-          const response = await fetch(`/lovable-uploads/img-${index + 1}.png`);
+          const response = await fetch(`/img/${imgName}`);
           if (response.ok) {
-            return `img-${index + 1}.png`;
+            return `${imgName}`;
           }
           return null;
         } catch (error) {
-          console.error(`Error loading image ${index + 1}:`, error);
+          console.error(`Error loading image ${imgName}:`, error);
           return null;
         }
       }));
@@ -110,15 +110,15 @@ const PhotoGrid = () => {
               className="origin-center"
             >
               <img
-                src={`/lovable-uploads/${imageUrl}`}
-                alt={`Memory ${index + 1}`}
+                src={`/img/${imgName}`}
+                alt={`Memory ${imgName}`}
                 className="w-full h-full object-cover rounded-lg shadow-lg"
                 loading="lazy"
                 onLoad={(e) => {
-                  console.log(`Image ${index + 1} loaded`);
+                  console.log(`Image ${imgName} loaded`);
                   e.currentTarget.classList.add('loaded');
                 }}
-                onError={() => console.error(`Image ${index + 1} failed to load`)}
+                onError={() => console.error(`Image ${imgName} failed to load`)}
               />
             </motion.div>
           );
