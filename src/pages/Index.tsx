@@ -7,24 +7,29 @@ const PhotoGrid = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   useEffect(() => {
-    // Function to load all image URLs
+    // Function to load all image URLs from the /img directory
     const loadImageUrls = async () => {
-      const allImages = await Promise.all([...Array(23)].map(async (_, index) => {
-        try {
-          const response = await fetch(`/img/${imgName}`);
-          if (response.ok) {
-            return `${imgName}`;
-          }
-          return null;
-        } catch (error) {
-          console.error(`Error loading image ${imgName}:`, error);
-          return null;
+      try {
+        // First, make a request to get all files in the directory
+        const response = await fetch('/img/');
+        if (!response.ok) {
+          console.error('Failed to fetch directory listing');
+          return;
         }
-      }));
+        
+        const files = (await response.text()).split('\n')
+          .filter(filename => 
+            filename.toLowerCase().endsWith('.png') || 
+            filename.toLowerCase().endsWith('.jpg') || 
+            filename.toLowerCase().endsWith('.jpeg')
+          );
 
-      // Filter out any failed loads
-      const validImages = allImages.filter((url): url is string => url !== null);
-      setImageUrls(validImages);
+        // Set the valid image URLs
+        setImageUrls(files);
+        console.log('Found images:', files);
+      } catch (error) {
+        console.error('Error loading images:', error);
+      }
     };
 
     loadImageUrls();
@@ -110,15 +115,15 @@ const PhotoGrid = () => {
               className="origin-center"
             >
               <img
-                src={`/img/${imgName}`}
-                alt={`Memory ${imgName}`}
+                src={`/img/${imageUrl}`}
+                alt={`Memory ${index + 1}`}
                 className="w-full h-full object-cover rounded-lg shadow-lg"
                 loading="lazy"
                 onLoad={(e) => {
-                  console.log(`Image ${imgName} loaded`);
+                  console.log(`Image ${imageUrl} loaded`);
                   e.currentTarget.classList.add('loaded');
                 }}
-                onError={() => console.error(`Image ${imgName} failed to load`)}
+                onError={() => console.error(`Image ${imageUrl} failed to load`)}
               />
             </motion.div>
           );
