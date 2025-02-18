@@ -1,9 +1,34 @@
 
 import { useEffect, useState } from "react";
-import { motion, useAnimationControls } from "framer-motion";
+import { motion } from "framer-motion";
 
 const PhotoGrid = () => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Function to load all image URLs
+    const loadImageUrls = async () => {
+      const allImages = await Promise.all([...Array(23)].map(async (_, index) => {
+        try {
+          const response = await fetch(`/lovable-uploads/img-${index + 1}.png`);
+          if (response.ok) {
+            return `img-${index + 1}.png`;
+          }
+          return null;
+        } catch (error) {
+          console.error(`Error loading image ${index + 1}:`, error);
+          return null;
+        }
+      }));
+
+      // Filter out any failed loads
+      const validImages = allImages.filter((url): url is string => url !== null);
+      setImageUrls(validImages);
+    };
+
+    loadImageUrls();
+  }, []);
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -37,6 +62,16 @@ const PhotoGrid = () => {
     };
   };
 
+  const generateRandomInitialPosition = () => {
+    const randomAngle = Math.random() * Math.PI * 2;
+    const distance = Math.random() * 500; // Random distance from center
+    return {
+      x: Math.cos(randomAngle) * distance,
+      y: Math.sin(randomAngle) * distance,
+      rotate: Math.random() * 360 // Random initial rotation
+    };
+  };
+
   return (
     <div className="fixed inset-0 overflow-hidden bg-black">
       {/* Title Overlay */}
@@ -53,19 +88,18 @@ const PhotoGrid = () => {
 
       {/* Flying Images */}
       <div className="relative w-full h-full">
-        {[...Array(23)].map((_, index) => {
+        {imageUrls.map((imageUrl, index) => {
           const size = 150 + Math.random() * 200; // Random size between 150px and 350px
-          const startX = Math.random() * dimensions.width;
-          const startY = Math.random() * dimensions.height;
+          const initialPosition = generateRandomInitialPosition();
 
           return (
             <motion.div
               key={index}
               initial={{ 
-                x: startX, 
-                y: startY, 
-                scale: 0,
-                rotate: 0 
+                x: initialPosition.x,
+                y: initialPosition.y,
+                rotate: initialPosition.rotate,
+                scale: 0
               }}
               animate={generateRandomAnimation()}
               style={{
@@ -76,7 +110,7 @@ const PhotoGrid = () => {
               className="origin-center"
             >
               <img
-                src={`/lovable-uploads/${imageUrls[index]}`}
+                src={`/lovable-uploads/${imageUrl}`}
                 alt={`Memory ${index + 1}`}
                 className="w-full h-full object-cover rounded-lg shadow-lg"
                 loading="lazy"
@@ -93,32 +127,5 @@ const PhotoGrid = () => {
     </div>
   );
 };
-
-// Image URLs array
-const imageUrls = [
-  "2f2cdda0-74e4-4b9a-8bad-341d091acafa.png",
-  "13f66126-45ed-492f-b2ba-0eb7d3427be8.png",
-  "f1c685ab-e7bf-4f94-865f-606966f04c56.png",
-  "306fe83e-8803-4cda-92d2-c869b64a6e17.png",
-  "a579b1b1-63db-45b7-b286-2e5d185d558f.png",
-  "798311a3-743f-45b2-b3e6-239ac31d42c1.png",
-  "3114e367-89e5-47bd-a197-433789f939e0.png",
-  "c607cb3f-ad55-4950-8d9d-d548c36dcf36.png",
-  "7137ff57-8200-4f45-b736-de32af7eb242.png",
-  "dc1aabeb-a664-47d7-9795-bdd506a311c3.png",
-  "14042cb7-b495-4dbb-b963-e09d3145c496.png",
-  "3106e1db-37f1-4c01-83ee-bd33ba9459b0.png",
-  "ca6d3e22-c0dd-4683-bc38-c0ee3b5d6801.png",
-  "ffee7564-6402-4db9-9d92-e6f5f4189164.png",
-  "0a662876-e084-4a8c-aefb-55482f9f1a05.png",
-  "042903e4-2ffc-4d5d-91d0-037a51393a21.png",
-  "28caca30-f94f-43cf-b794-1973adfa4c67.png",
-  "6062ee04-2bc8-4c68-99a3-8f3e93ca7de6.png",
-  "41fdae7b-0b14-4ed1-bea8-134b8e6bf8be.png",
-  "9278ed08-b4ae-490d-bb29-eb12a64a9deb.png",
-  "e776963f-f5e3-4862-8aec-d865b1e17d96.png",
-  "b4c3d650-7ddc-4a2d-b7a7-972a4cfe3135.png",
-  "fe782ed4-be4a-4598-b617-06be0d8a3057.png",
-];
 
 export default PhotoGrid;
