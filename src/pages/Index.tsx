@@ -37,7 +37,7 @@ const PhotoGrid = () => {
         transition={{ duration: 1, delay: 0.5 }}
         className="fixed inset-0 flex items-center justify-center z-50"
       >
-        <h1 className="text-4xl md:text-6xl font-light text-white text-center mix-blend-difference">
+        <h1 className="text-4xl md:text-6xl font-light text-white text-center mix-blend-difference drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)]">
           Leonardo Chen
         </h1>
       </motion.div>
