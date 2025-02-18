@@ -74,7 +74,7 @@ const PhotoGrid = () => {
             layout
             transition={{
               type: "spring",
-              stiffness: 200,
+              stiffness: 100,
               damping: 30
             }}
           >
