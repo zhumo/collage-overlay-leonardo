@@ -53,7 +53,7 @@ const PhotoGrid = () => {
 
       {/* Flying Images */}
       <div className="relative w-full h-full">
-        {[...Array(29)].map((_, index) => {
+        {[...Array(23)].map((_, index) => {
           const size = 150 + Math.random() * 200; // Random size between 150px and 350px
           const startX = Math.random() * dimensions.width;
           const startY = Math.random() * dimensions.height;
@@ -96,35 +96,29 @@ const PhotoGrid = () => {
 
 // Image URLs array
 const imageUrls = [
-  "4f0f943e-215b-45b1-90fd-73ee68bd7eba.png",
-  "b86042de-96f9-4270-8f7a-9ee8bed3868b.png",
-  "1233aa72-f62f-4e94-9d82-ca4abe9f53f7.png",
-  "93528515-359a-4c1c-b899-970e4d54225c.png",
-  "17899094-a9ca-417d-849b-ca09d3f64229.png",
-  "a912b929-5839-4699-894a-99f74f839895.png",
-  "4983b1f1-6011-4291-899c-9441a99593d2.png",
-  "5c9c4597-7593-477a-890f-faba42616596.png",
-  "7699899d-8653-469f-9999-83865e522543.png",
-  "14891999-639c-407c-b91c-908793a9810a.png",
-  "1964344f-9999-455a-a9c3-5c999697c958.png",
-  "99242599-3999-444c-a999-49994c99999c.png",
-  "29677777-7777-477a-a777-a77a7a77777a.png",
-  "33333333-3333-4333-a333-a3a33333333a.png",
-  "44444444-4444-444a-a444-a4a44444444a.png",
-  "55555555-5555-4555-a555-a5a55555555a.png",
-  "66666666-6666-4666-a666-a6a66666666a.png",
-  "77777777-7777-477a-a777-a77a7a77777a.png",
-  "88888888-8888-4888-a888-a8a88888888a.png",
-  "99999999-9999-4999-a999-a9a99999999a.png",
-  "aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa.png",
-  "bbbbbbbb-bbbb-4bbb-abbb-bbbbbbbbbbbb.png",
-  "cccccccc-cccc-4ccc-accc-cccccccccccc.png",
-  "dddddddd-dddd-4ddd-addd-dddddddddddd.png",
-  "eeeeeeee-eeee-4eee-aeee-eeeeeeeeeeee.png",
-  "ffffffff-ffff-4fff-afff-ffffffffffff.png",
-  "11111111-1111-4111-a111-11111111111a.png",
-  "22222222-2222-4222-a222-22222222222a.png",
-  "33333333-3333-4333-a333-33333333333a.png",
+  "2f2cdda0-74e4-4b9a-8bad-341d091acafa.png",
+  "13f66126-45ed-492f-b2ba-0eb7d3427be8.png",
+  "f1c685ab-e7bf-4f94-865f-606966f04c56.png",
+  "306fe83e-8803-4cda-92d2-c869b64a6e17.png",
+  "a579b1b1-63db-45b7-b286-2e5d185d558f.png",
+  "798311a3-743f-45b2-b3e6-239ac31d42c1.png",
+  "3114e367-89e5-47bd-a197-433789f939e0.png",
+  "c607cb3f-ad55-4950-8d9d-d548c36dcf36.png",
+  "7137ff57-8200-4f45-b736-de32af7eb242.png",
+  "dc1aabeb-a664-47d7-9795-bdd506a311c3.png",
+  "14042cb7-b495-4dbb-b963-e09d3145c496.png",
+  "3106e1db-37f1-4c01-83ee-bd33ba9459b0.png",
+  "ca6d3e22-c0dd-4683-bc38-c0ee3b5d6801.png",
+  "ffee7564-6402-4db9-9d92-e6f5f4189164.png",
+  "0a662876-e084-4a8c-aefb-55482f9f1a05.png",
+  "042903e4-2ffc-4d5d-91d0-037a51393a21.png",
+  "28caca30-f94f-43cf-b794-1973adfa4c67.png",
+  "6062ee04-2bc8-4c68-99a3-8f3e93ca7de6.png",
+  "41fdae7b-0b14-4ed1-bea8-134b8e6bf8be.png",
+  "9278ed08-b4ae-490d-bb29-eb12a64a9deb.png",
+  "e776963f-f5e3-4862-8aec-d865b1e17d96.png",
+  "b4c3d650-7ddc-4a2d-b7a7-972a4cfe3135.png",
+  "fe782ed4-be4a-4598-b617-06be0d8a3057.png",
 ];
 
 export default PhotoGrid;
