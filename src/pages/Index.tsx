@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 const PhotoGrid = () => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const [shuffledIndices, setShuffledIndices] = useState<number[]>([]);
 
   const imageUrls = [
     "1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg",
@@ -14,6 +15,28 @@ const PhotoGrid = () => {
     "26.JPG", "27.jpeg", "28.jpeg", "29.jpeg", "30.JPG",
     "31.jpeg", "32.JPG", "33.jpeg", "34.jpeg"
   ];
+
+  // Function to shuffle array
+  const shuffleArray = (array: number[]) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
+
+  useEffect(() => {
+    // Initialize shuffled indices
+    setShuffledIndices(shuffleArray([...Array(imageUrls.length)].map((_, i) => i)));
+
+    // Set up the interval for reshuffling
+    const intervalId = setInterval(() => {
+      setShuffledIndices(prevIndices => shuffleArray([...prevIndices]));
+    }, 3000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -44,20 +67,29 @@ const PhotoGrid = () => {
 
       {/* Grid Layout */}
       <div className="grid grid-cols-6 h-screen w-screen">
-        {imageUrls.map((imageUrl, index) => (
-          <div key={index} className="relative aspect-square w-full h-full">
+        {shuffledIndices.map((originalIndex, currentIndex) => (
+          <motion.div 
+            key={originalIndex}
+            className="relative aspect-square w-full h-full"
+            layout
+            transition={{
+              type: "spring",
+              stiffness: 200,
+              damping: 30
+            }}
+          >
             <img
-              src={`/img/${imageUrl}`}
-              alt={`Memory ${index + 1}`}
+              src={`/img/${imageUrls[originalIndex]}`}
+              alt={`Memory ${originalIndex + 1}`}
               className="w-full h-full object-cover"
               loading="lazy"
               onLoad={(e) => {
-                console.log(`Image ${imageUrl} loaded`);
+                console.log(`Image ${imageUrls[originalIndex]} loaded`);
                 e.currentTarget.classList.add('loaded');
               }}
-              onError={() => console.error(`Image ${imageUrl} failed to load`)}
+              onError={() => console.error(`Image ${imageUrls[originalIndex]} failed to load`)}
             />
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
