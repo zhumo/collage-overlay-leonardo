@@ -1,65 +1,95 @@
 
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, useAnimationControls } from "framer-motion";
 
 const PhotoGrid = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    
-    const images = containerRef.current.querySelectorAll('img');
-    images.forEach(img => {
-      img.addEventListener('load', () => {
-        console.log(`Image loaded successfully: ${img.src}`);
-        img.classList.add('loaded');
+    const updateDimensions = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
       });
-      img.addEventListener('error', () => {
-        console.error(`Failed to load image: ${img.src}`);
-      });
-    });
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  return (
-    <div className="min-h-screen bg-neutral-50 p-4 md:p-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative mx-auto max-w-[1400px]"
-      >
-        {/* Title Overlay */}
-        <div className="sticky top-0 z-50 py-6 bg-neutral-50/80 backdrop-blur-sm mb-8">
-          <h1 className="text-4xl md:text-6xl font-light text-neutral-800 text-center">
-            Leonardo Chen
-          </h1>
-        </div>
+  const generateRandomAnimation = () => {
+    const randomX = Math.random() * dimensions.width - dimensions.width / 2;
+    const randomY = Math.random() * dimensions.height - dimensions.height / 2;
+    const randomRotate = Math.random() * 360 - 180;
+    const randomDuration = 15 + Math.random() * 20;
 
-        {/* Photo Grid */}
-        <div 
-          ref={containerRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-max"
-        >
-          {[...Array(29)].map((_, index) => (
+    return {
+      x: [randomX, -randomX, randomX],
+      y: [randomY, -randomY, randomY],
+      rotate: [randomRotate, -randomRotate, randomRotate],
+      transition: {
+        duration: randomDuration,
+        repeat: Infinity,
+        ease: "linear",
+        times: [0, 0.5, 1]
+      }
+    };
+  };
+
+  return (
+    <div className="fixed inset-0 overflow-hidden bg-black">
+      {/* Title Overlay */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.5 }}
+        className="fixed top-0 left-0 w-full z-50 py-6 bg-transparent"
+      >
+        <h1 className="text-4xl md:text-6xl font-light text-white text-center mix-blend-difference">
+          Leonardo Chen
+        </h1>
+      </motion.div>
+
+      {/* Flying Images */}
+      <div className="relative w-full h-full">
+        {[...Array(29)].map((_, index) => {
+          const size = 150 + Math.random() * 200; // Random size between 150px and 350px
+          const startX = Math.random() * dimensions.width;
+          const startY = Math.random() * dimensions.height;
+
+          return (
             <motion.div
               key={index}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="relative aspect-square group overflow-hidden bg-neutral-100 rounded-lg"
+              initial={{ 
+                x: startX, 
+                y: startY, 
+                scale: 0,
+                rotate: 0 
+              }}
+              animate={generateRandomAnimation()}
+              style={{
+                position: 'absolute',
+                width: size,
+                height: size,
+              }}
+              className="origin-center"
             >
               <img
                 src={`/lovable-uploads/${imageUrls[index]}`}
                 alt={`Memory ${index + 1}`}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-full object-cover rounded-lg shadow-lg"
                 loading="lazy"
-                onLoad={() => console.log(`Image ${index + 1} loaded`)}
+                onLoad={(e) => {
+                  console.log(`Image ${index + 1} loaded`);
+                  e.currentTarget.classList.add('loaded');
+                }}
                 onError={() => console.error(`Image ${index + 1} failed to load`)}
               />
             </motion.div>
-          ))}
-        </div>
-      </motion.div>
+          );
+        })}
+      </div>
     </div>
   );
 };
