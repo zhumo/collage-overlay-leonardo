@@ -44,7 +44,7 @@ const PhotoGrid = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 0.5 }}
-        className="fixed top-0 left-0 w-full z-50 py-6 bg-transparent"
+        className="fixed inset-0 flex items-center justify-center z-50"
       >
         <h1 className="text-4xl md:text-6xl font-light text-white text-center mix-blend-difference">
           Leonardo Chen
